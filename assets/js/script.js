@@ -21,9 +21,33 @@ const renderDate = () => {
 };
 
 const renderTimeBlock = () => {
-  const renderBlock = () => {
-    const currentTime = moment().format("H");
-    console.log(currentTime);
+  const currentTime = moment().format("H");
+  console.log(currentTime);
+
+  const renderBlock = (each) => {
+    $("#container").append(
+      $("<div>")
+        .addClass("time-block row d-flex flex-row")
+        .attr("id", `time-block-${each.key}`)
+        .attr("data-key", `${each.key}`)
+        .append(
+          $("<p>")
+            .addClass("time-area p-2 hour")
+            .attr("id", `time-${each.key}`)
+            .attr("data-key", `${each.key}`)
+            .html(`${each.timeLabel}`),
+          $("<textarea>")
+            .addClass("task-area description flex-grow-1 p-2")
+            .attr("id", `task-${each.key}`)
+            .attr("data-key", `${each.key}`)
+            .html("No task"),
+          $("<button>")
+            .addClass("btn-area saveBtn p-2")
+            .attr("id", `btn-${each.key}`)
+            .attr("data-key", `${each.key}`)
+            .html("Save")
+        )
+    );
   };
   workingHours.forEach(renderBlock);
 };
