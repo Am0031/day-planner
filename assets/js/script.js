@@ -12,12 +12,30 @@ const workingHours = [
   { timeLabel: "6pm", key: 18 },
 ];
 
-const getFromLS = () => {
-  console.log("getting info from LS");
+const getFromLS = (key) => {
+  const infoFromLS = localStorage.getItem(key);
+  console.log(infoFromLS);
+  return infoFromLS;
 };
+
+const writeToLS = (key, data) => {
+  localStorage.setItem(key, data);
+};
+
 const renderDate = () => {
   const currentDate = moment().format("dddd, Do of MMMM YYYY");
   $("#currentDay").append(currentDate);
+};
+
+const handleSaveClick = (event) => {
+  event.stopPropagation();
+  const targetKey = $(event.target).attr("data-key");
+  console.log(targetKey);
+
+  const taskValue = $(`#task-${targetKey}`).val();
+  console.log(taskValue);
+
+  writeToLS(targetKey, taskValue);
 };
 
 const renderTimeBlock = () => {
@@ -53,12 +71,14 @@ const renderTimeBlock = () => {
             .addClass(`task-area description flex-grow-1 p-2}`)
             .attr("id", `task-${each.key}`)
             .attr("data-key", `${each.key}`)
-            .html("No task"),
+            .html(""),
           $("<button>")
             .addClass("btn-area saveBtn p-2")
+            .attr("type", "button")
             .attr("id", `btn-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html("Save")
+            .click(handleSaveClick)
         )
     );
 
