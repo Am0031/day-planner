@@ -21,8 +21,21 @@ const renderDate = () => {
 };
 
 const renderTimeBlock = () => {
-  const currentTime = moment().format("H");
-  console.log(currentTime);
+  //METHOD 1 - with variable to get the appropriate class, then assign the additional class when rendering  -> need to add ${getHourClass(each)} in textarea addClass line
+  // const getHourClass = (each) => {
+  //   const currentTime = moment().format("H");
+  //   let hourClass = "";
+  //   if (each.key < currentTime) {
+  //     hourClass = "past";
+  //   } else if (each.key === currentTime) {
+  //     hourClass = "present";
+  //   } else {
+  //     hourClass = "future";
+  //   }
+  //   return hourClass;
+  // };
+
+  const currentTime = 17; //moment().format("H");
 
   const renderBlock = (each) => {
     $("#container").append(
@@ -37,7 +50,7 @@ const renderTimeBlock = () => {
             .attr("data-key", `${each.key}`)
             .html(`${each.timeLabel}`),
           $("<textarea>")
-            .addClass("task-area description flex-grow-1 p-2")
+            .addClass(`task-area description flex-grow-1 p-2}`)
             .attr("id", `task-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html("No task"),
@@ -48,7 +61,30 @@ const renderTimeBlock = () => {
             .html("Save")
         )
     );
+
+    //METHOD 2 - with each function targeting the textarea after its creation
+    // $(`#task-${each.key}`).each(function () {
+    //   if (each.key < currentTime) {
+    //     $(`#task-${each.key}`).addClass("past");
+    //   } else if (each.key === currentTime) {
+    //     $(`#task-${each.key}`).addClass("present");
+    //   } else {
+    //     $(`#task-${each.key}`).addClass("future");
+    //   }
+    // });
+
+    //METHOD 3 - with addClass function directly targeting the textarea after its creation
+    $(`#task-${each.key}`).addClass(function () {
+      if (each.key < currentTime) {
+        return "past";
+      } else if (each.key === currentTime) {
+        return "present";
+      } else {
+        return "future";
+      }
+    });
   };
+
   workingHours.forEach(renderBlock);
 };
 
