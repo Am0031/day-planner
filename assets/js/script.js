@@ -13,9 +13,7 @@ const workingHours = [
 ];
 
 const getFromLS = (key) => {
-  const infoFromLS = localStorage.getItem(key);
-  console.log(infoFromLS);
-  return infoFromLS;
+  return JSON.parse(localStorage.getItem(key));
 };
 
 const writeToLS = (key, data) => {
@@ -71,6 +69,7 @@ const renderTimeBlock = () => {
             .addClass(`task-area description flex-grow-1 p-2}`)
             .attr("id", `task-${each.key}`)
             .attr("data-key", `${each.key}`)
+            .text("")
             .html(""),
           $("<button>")
             .addClass("btn-area saveBtn p-2")
@@ -103,13 +102,24 @@ const renderTimeBlock = () => {
         return "future";
       }
     });
+
+    //NOT WORKING - Display tasks from local storage in corresponding text areas
+    $(`#task-${each.key}`).add(function () {
+      const keyLS = each.key.toString();
+      console.log(keyLS);
+      const taskLS = getFromLS(keyLS);
+      console.log(taskLS);
+      if (taskLS) {
+        const taskValue = taskLS.val;
+        $(`#task-${each.key}`).html(taskValue);
+      }
+    });
   };
 
   workingHours.forEach(renderBlock);
 };
 
 const renderPlanner = () => {
-  getFromLS();
   renderDate();
   renderTimeBlock();
 };
