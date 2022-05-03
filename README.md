@@ -1,4 +1,43 @@
-# day-planner
+# Day-planner
+
+This project is to develop a simple page where the user can add some tasks at specific hours of the day, save them (persistent data), edit them or even remove them.
+
+Deployed URL:
+
+Github repository:
+
+## General description of the page
+
+When accessing the page, the user can see a large header with title and the current date. Underneath is a set of time blocks which represent a working day. Each time block consists of a time label on the left, a text field in the middle where the user can enter a task, two buttons on the right to save the task in the text field or remove it from the text field.
+The user also has the option to clear all text fields in the schedule by clicking on the "Clear Schedule" button located just above the time blocks.
+
+The text fields in the timeblocks are colour coded based on the current time:
+
+- grey: for hours of the day that have already passed
+- red: for the current hour
+- green: for the remaining hours in the working day
+
+## Screenshot of the page
+
+<details>
+<summary>Day planner screenshot - desktop version</summary>
+
+![Day planner screenshot - desktop version](./assets/screenshots/desktop-day-planner.png)
+
+</details>
+
+<details>
+<summary>Day planner screenshot - mobile version</summary>
+
+![Day planner screenshot - mobile version](./assets/screenshots/mobile-day-planner.png)
+
+</details>
+
+## Technologies
+
+## Steps taken to develop the page
+
+## Further improvements possible
 
 General notes:
 
