@@ -2,7 +2,7 @@
 
 This project is to develop a simple page where the user can add some tasks at specific hours of the day, save them (persistent data), edit them or even remove them.
 
-Deployed URL:
+Deployed URL: [https://am0031.github.io/day-planner/](https://am0031.github.io/day-planner/)
 
 Github repository: [https://github.com/Am0031/day-planner](https://github.com/Am0031/day-planner)
 
