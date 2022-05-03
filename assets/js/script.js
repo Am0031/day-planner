@@ -13,7 +13,7 @@ const workingHours = [
   { timeLabel: "6pm", key: 18 },
 ];
 
-//Utility functions
+//UTILITY FUNCTIONS
 
 //Get from local storage
 const getFromLS = (key) => {
@@ -36,6 +36,8 @@ const clearLS = () => {
   localStorage.clear();
 };
 
+//END UTILITY FUNCTIONS
+
 //funtion to render current date in header (moment.js)
 const renderDate = () => {
   const currentDate = moment().format("dddd, Do of MMMM YYYY");
@@ -56,7 +58,6 @@ const handleRemoveClick = (event) => {
 const handleSaveClick = (event) => {
   //stops propagation to other elements in the container
   event.stopPropagation();
-  console.log(event);
   //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
   //gets the value of the corresponding textarea (textarea with same data-key)
@@ -71,7 +72,7 @@ const handleClearClick = () => {
   event.stopPropagation();
   //calls function to clear local storage
   clearLS();
-  //reloads the page to show that the timeblocks have been cleared
+  //reloads the page to show that the time blocks have been cleared
   window.location.reload(true);
 };
 
@@ -97,10 +98,10 @@ const renderClearButton = () => {
 
 //function to render the time blocks on the page
 const renderTimeBlock = () => {
-  //fetches the current time with moment.js
+  //fetches the current time with moment.js and parse it to ensure it is number type
   const currentTime = parseInt(moment().format("H"));
-  console.log(currentTime);
 
+  //creates and append the n time block
   const renderBlock = (each) => {
     $("#container").append(
       $("<div>")
@@ -124,7 +125,9 @@ const renderTimeBlock = () => {
             .attr("type", "button")
             .attr("id", `saveBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
+            //add fontawesome info for icon display in button
             .html('<i class="fa-solid fa-floppy-disk"></i>')
+            //add the relevant click event to the button - here the save button
             .click(handleSaveClick),
           $("<button>")
             .addClass("btn-area removeBtn p-2")
@@ -132,12 +135,14 @@ const renderTimeBlock = () => {
             .attr("id", `removeBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html('<i class="fa-solid fa-trash"></i>')
+            //add the relevant click event to the button - here the remove button
             .click(handleRemoveClick)
         )
     );
 
-    //Add time related class - with addClass function directly targeting the textarea after its creation
+    //Add time related class to n time block's textarea
     $(`#task-${each.key}`).addClass(function () {
+      //compares number stored in n key and current time number
       if (each.key < currentTime) {
         return "past";
       } else if (each.key === currentTime) {
@@ -147,26 +152,32 @@ const renderTimeBlock = () => {
       }
     });
 
-    //Display tasks from local storage in corresponding text areas
+    //Display task from local storage in corresponding n text area
     $(`#task-${each.key}`).add(function () {
+      //converts key into a string
       const keyLS = each.key.toString();
-      console.log(keyLS);
+      //pass the string to the getFromLS function (as local storage stores strings)
       const taskLS = getFromLS(keyLS);
-      console.log(taskLS);
+      //if the function returns a value from LS, then writes this value into the html attribute
       if (taskLS) {
         $(`#task-${each.key}`).html(taskLS);
       }
     });
   };
 
+  //function - loop that goes through every object stored in the working hours array and passed it to the renderBlock function
   workingHours.forEach(renderBlock);
 };
 
 //Main function triggered on load
 const renderPlanner = () => {
+  //1st step - render date in header
   renderDate();
+  //2nd step - render clear button in main div container
   renderClearButton();
+  //3rd step - render time block in main div container
   renderTimeBlock();
 };
 
+//instruction on load of page
 $(window).on("load", renderPlanner);
