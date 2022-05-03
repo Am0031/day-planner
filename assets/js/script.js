@@ -38,7 +38,7 @@ const clearLS = () => {
 
 //END UTILITY FUNCTIONS
 
-//funtion to render current date in header (moment.js)
+//function to render current date in header (moment.js)
 const renderDate = () => {
   const currentDate = moment().format("dddd, Do of MMMM YYYY");
   $("#currentDay").append(currentDate);
@@ -156,7 +156,7 @@ const renderTimeBlock = () => {
     });
   };
 
-  //function - loop that goes through every object stored in the working hours array and passed it to the renderBlock function
+  //function - loop that goes through each of the n objects stored in the working hours array and pass it to the renderBlock function
   workingHours.forEach(renderBlock);
 };
 
