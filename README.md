@@ -9,13 +9,18 @@ Github repository: [https://github.com/Am0031/day-planner](https://github.com/Am
 ## General description of the page
 
 When accessing the page, the user can see a large header with title and the current date. Underneath is a set of time blocks which represent a working day. Each time block consists of a time label on the left, a text field in the middle where the user can enter a task, two buttons on the right to save the task in the text field or remove it from the text field.
-The user also has the option to clear all text fields in the schedule by clicking on the "Clear Schedule" button located just above the time blocks.
 
 The text fields in the timeblocks are colour coded based on the current time:
 
 - grey: for hours of the day that have already passed
 - red: for the current hour
 - green: for the remaining hours in the working day
+
+The user also has the option to use the local storage to keep track of their tasks. When interaction with the page, the user can:
+
+- save their task in each time block in local storage with the blue save button in each time block
+- clear one specific task from local storage with the orange remove button in each time block
+- clear the complete scheduler with the orange button "clear scheduler" above the time blocks
 
 ## Screenshot of the page
 
