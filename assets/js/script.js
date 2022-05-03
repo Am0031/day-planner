@@ -47,7 +47,7 @@ const handleClearClick = () => {
 const renderClearButton = () => {
   $("#container").append(
     $("<div>")
-      .addClass("clear-block row d-flex flex-row")
+      .addClass("clear-block d-flex flex-row justify-content-center")
       .attr("id", "clear-btn")
       .append(
         $("<button>")
