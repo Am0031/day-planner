@@ -38,6 +38,29 @@ const handleSaveClick = (event) => {
   writeToLS(targetKey, taskValue);
 };
 
+const handleClearClick = () => {
+  console.log("LS clear start");
+  localStorage.clear();
+  console.log("LS clear end");
+  window.location.reload(true);
+};
+const renderClearButton = () => {
+  $("#container").append(
+    $("<div>")
+      .addClass("clear-block row d-flex flex-row")
+      .attr("id", "clear-btn")
+      .append(
+        $("<button>")
+          .addClass("clearBtn p-2")
+          .attr("type", "button")
+          .attr("id", "clear-btn")
+          .attr("data-key", "all")
+          .html("Clear Scheduler")
+          .click(handleClearClick)
+      )
+  );
+};
+
 const renderTimeBlock = () => {
   //METHOD 1 - with variable to get the appropriate class, then assign the additional class when rendering  -> need to add ${getHourClass(each)} in textarea addClass line
   // const getHourClass = (each) => {
@@ -54,26 +77,6 @@ const renderTimeBlock = () => {
   // };
 
   const currentTime = 17; //moment().format("H");
-
-  const handleClearClick = () => {
-    console.log("LS cleared");
-  };
-  const renderClearButton = () => {
-    $("#container").append(
-      $("<div>")
-        .addClass("clear-block row d-flex flex-row")
-        .attr("id", "clear-btn")
-        .append(
-          $("<button>")
-            .addClass("clearBtn p-2")
-            .attr("type", "button")
-            .attr("id", "clear-btn")
-            .attr("data-key", "all")
-            .html("Clear Scheduler")
-            .click(handleClearClick)
-        )
-    );
-  };
 
   const renderBlock = (each) => {
     $("#container").append(
@@ -137,12 +140,12 @@ const renderTimeBlock = () => {
     });
   };
 
-  renderClearButton();
   workingHours.forEach(renderBlock);
 };
 
 const renderPlanner = () => {
   renderDate();
+  renderClearButton();
   renderTimeBlock();
 };
 
