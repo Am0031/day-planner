@@ -76,7 +76,8 @@ const renderTimeBlock = () => {
   //   return hourClass;
   // };
 
-  const currentTime = 17; //moment().format("H");
+  const currentTime = parseInt(moment().format("H"));
+  console.log(currentTime);
 
   const renderBlock = (each) => {
     $("#container").append(
