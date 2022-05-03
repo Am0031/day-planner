@@ -2,6 +2,7 @@ body {
   font-family: "Open Sans", sans-serif;
   font-size: 16px;
   line-height: 1;
+  margin-bottom: 2rem;
 }
 
 textarea {
@@ -10,7 +11,7 @@ textarea {
   resize: none;
   color: #000000;
   border-left: 1px solid black;
-  padding: 10px;
+  padding: 0.6rem;
 }
 
 i {
@@ -22,7 +23,7 @@ i {
   background-color: transparent;
   color: black;
   border-radius: 0;
-  border-bottom: 10px solid black;
+  border-bottom: 0.6rem solid black;
 }
 
 .description {
@@ -31,12 +32,12 @@ i {
 
 .time-block {
   text-align: center;
-  border-radius: 15px;
+  border-radius: 1rem;
 }
 
 .row {
   white-space: pre-wrap;
-  height: 80px;
+  height: 5rem;
   border-top: 1px solid white;
 }
 
@@ -54,16 +55,17 @@ i {
 
 .present {
   background-color: #ff6961;
-  color: white;
+  color: #000000;
 }
 
 .future {
   background-color: #77dd77;
-  color: white;
+  color: #000000;
 }
 
 .saveBtn,
-.removeBtn {
+.removeBtn,
+.clearBtn {
   border-left: 1px solid black;
   border-radius: 10px;
   color: white;
@@ -73,7 +75,8 @@ i {
   background-color: #06aed5;
 }
 
-.removeBtn {
+.removeBtn,
+.clearBtn {
   background-color: #d57b06;
 }
 
@@ -81,10 +84,13 @@ i {
   width: 20%;
   margin-bottom: 10px;
 }
-
 .saveBtn:hover,
-.clearBtn:hover,
 .removeBtn:hover {
   font-size: 1.2rem;
   transition: all 0.3s ease-in-out;
+  color: #000000;
+}
+
+.clearBtn:hover {
+  color: #000000;
 }

@@ -84,7 +84,7 @@ const renderClearButton = () => {
       .attr("id", "clear-btn")
       .append(
         $("<button>")
-          .addClass("clearBtn removeBtn p-2")
+          .addClass("clearBtn p-2")
           .attr("type", "button")
           .attr("id", "clear-btn")
           .attr("data-key", "all")
@@ -109,7 +109,7 @@ const renderTimeBlock = () => {
         .attr("data-key", `${each.key}`)
         .append(
           $("<p>")
-            .addClass("time-area p-2 hour")
+            .addClass("time-area text-right p-2 hour")
             .attr("id", `time-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html(`${each.timeLabel}`),
@@ -131,7 +131,7 @@ const renderTimeBlock = () => {
             .attr("type", "button")
             .attr("id", `removeBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
-            .html('<i class="fa-solid fa-circle-minus"></i>')
+            .html('<i class="fa-solid fa-trash"></i>')
             .click(handleRemoveClick)
         )
     );
