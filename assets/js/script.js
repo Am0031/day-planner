@@ -61,7 +61,7 @@ const handleSaveClick = (event) => {
   //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
   //gets the value of the corresponding textarea (textarea with same data-key)
-  const taskValue = $(`#task-${targetKey}`).val();
+  const taskValue = $(`textarea[data-key=${targetKey}]`).val();
   //sets the data-key and its value in local storage (for data persistence)
   writeToLS(targetKey, taskValue);
 };
@@ -82,13 +82,10 @@ const renderClearButton = () => {
   $("#container").append(
     $("<div>")
       .addClass("clear-block d-flex flex-row justify-content-center")
-      .attr("id", "clear-btn")
       .append(
         $("<button>")
           .addClass("clearBtn p-2")
           .attr("type", "button")
-          .attr("id", "clear-btn")
-          .attr("data-key", "all")
           .html("Clear Scheduler")
           //adds event listener on the button
           .click(handleClearClick)
@@ -111,19 +108,14 @@ const renderTimeBlock = () => {
         .append(
           $("<p>")
             .addClass("time-area text-right p-2 hour")
-            .attr("id", `time-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html(`${each.timeLabel}`),
           $("<textarea>")
             .addClass(`task-area description flex-grow-1 p-2}`)
-            .attr("id", `task-${each.key}`)
-            .attr("data-key", `${each.key}`)
-            .text("")
-            .html(""),
+            .attr("data-key", `${each.key}`),
           $("<button>")
             .addClass("btn-area saveBtn p-2")
             .attr("type", "button")
-            .attr("id", `saveBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
             //add fontawesome info for icon display in button
             .html('<i class="fa-solid fa-floppy-disk"></i>')
@@ -132,7 +124,6 @@ const renderTimeBlock = () => {
           $("<button>")
             .addClass("btn-area removeBtn p-2")
             .attr("type", "button")
-            .attr("id", `removeBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html('<i class="fa-solid fa-trash"></i>')
             //add the relevant click event to the button - here the remove button
@@ -141,7 +132,7 @@ const renderTimeBlock = () => {
     );
 
     //Add time related class to n time block's textarea
-    $(`#task-${each.key}`).addClass(function () {
+    $(`textarea[data-key=${each.key}]`).addClass(() => {
       //compares number stored in n key and current time number
       if (each.key < currentTime) {
         return "past";
@@ -153,14 +144,14 @@ const renderTimeBlock = () => {
     });
 
     //Display task from local storage in corresponding n text area
-    $(`#task-${each.key}`).add(function () {
+    $(`textarea[data-key=${each.key}]`).add(() => {
       //converts key into a string
       const keyLS = each.key.toString();
       //pass the string to the getFromLS function (as local storage stores strings)
       const taskLS = getFromLS(keyLS);
       //if the function returns a value from LS, then writes this value into the html attribute
       if (taskLS) {
-        $(`#task-${each.key}`).html(taskLS);
+        $(`textarea[data-key=${each.key}]`).html(taskLS);
       }
     });
   };

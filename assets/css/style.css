@@ -10,6 +10,15 @@ i {
   pointer-events: none;
 }
 
+textarea {
+  background: transparent;
+  border: none;
+  resize: none;
+  color: #000000;
+  border-left: 1px solid black;
+  padding: 0.6rem;
+}
+
 /* Styling for header */
 .jumbotron {
   text-align: center;
@@ -20,15 +29,6 @@ i {
 }
 
 /* Styling for main div container - time blocks */
-
-textarea {
-  background: transparent;
-  border: none;
-  resize: none;
-  color: #000000;
-  border-left: 1px solid black;
-  padding: 0.6rem;
-}
 
 .description {
   white-space: pre-wrap;
@@ -51,6 +51,7 @@ textarea {
   border-top: 1px dashed #000000;
   width: 10%;
 }
+
 /*Styling text areas to apply time-related background colours */
 .past {
   background-color: #d3d3d3;
@@ -100,4 +101,10 @@ textarea {
 
 .clearBtn:hover {
   color: #000000;
+}
+
+@media (max-width: 590px) {
+  .display-3 {
+    font-size: 2rem;
+  }
 }
