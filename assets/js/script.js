@@ -55,6 +55,26 @@ const renderTimeBlock = () => {
 
   const currentTime = 17; //moment().format("H");
 
+  const handleClearClick = () => {
+    console.log("LS cleared");
+  };
+  const renderClearButton = () => {
+    $("#container").append(
+      $("<div>")
+        .addClass("clear-block row d-flex flex-row")
+        .attr("id", "clear-btn")
+        .append(
+          $("<button>")
+            .addClass("clearBtn p-2")
+            .attr("type", "button")
+            .attr("id", "clear-btn")
+            .attr("data-key", "all")
+            .html("Clear Scheduler")
+            .click(handleClearClick)
+        )
+    );
+  };
+
   const renderBlock = (each) => {
     $("#container").append(
       $("<div>")
@@ -117,7 +137,7 @@ const renderTimeBlock = () => {
     });
   };
 
-  //renderClearButton();
+  renderClearButton();
   workingHours.forEach(renderBlock);
 };
 
