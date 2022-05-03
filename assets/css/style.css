@@ -73,9 +73,9 @@ textarea {
 .removeBtn,
 .clearBtn {
   border-left: 1px solid black;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   color: white;
-  min-width: 50px;
+  min-width: 3rem;
 }
 .saveBtn {
   background-color: #06aed5;
@@ -88,7 +88,7 @@ textarea {
 
 .clearBtn {
   width: 20%;
-  margin-bottom: 10px;
+  margin-bottom: 0.6rem;
 }
 
 /* Styling buttons with pseudo class hover*/
@@ -104,7 +104,17 @@ textarea {
 }
 
 @media (max-width: 590px) {
+  body {
+    font-size: 10px;
+    line-height: 1;
+    margin-bottom: 2rem;
+  }
   .display-3 {
     font-size: 2rem;
+  }
+
+  .clearBtn {
+    width: 50%;
+    margin-bottom: 0.6rem;
   }
 }
