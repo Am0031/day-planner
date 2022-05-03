@@ -56,6 +56,7 @@ const handleRemoveClick = (event) => {
 const handleSaveClick = (event) => {
   //stops propagation to other elements in the container
   event.stopPropagation();
+  console.log(event);
   //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
   //gets the value of the corresponding textarea (textarea with same data-key)
@@ -83,7 +84,7 @@ const renderClearButton = () => {
       .attr("id", "clear-btn")
       .append(
         $("<button>")
-          .addClass("clearBtn p-2")
+          .addClass("clearBtn removeBtn p-2")
           .attr("type", "button")
           .attr("id", "clear-btn")
           .attr("data-key", "all")
@@ -123,14 +124,14 @@ const renderTimeBlock = () => {
             .attr("type", "button")
             .attr("id", `saveBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
-            .html("Save")
+            .html('<i class="fa-solid fa-floppy-disk"></i>')
             .click(handleSaveClick),
           $("<button>")
-            .addClass("btn-area saveBtn p-2")
+            .addClass("btn-area removeBtn p-2")
             .attr("type", "button")
             .attr("id", `removeBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
-            .html("Remove")
+            .html('<i class="fa-solid fa-circle-minus"></i>')
             .click(handleRemoveClick)
         )
     );
