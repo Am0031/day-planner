@@ -12,16 +12,14 @@ const workingHours = [
   { timeLabel: "6pm", key: 18 },
 ];
 
-//NOT WORKING - Getting tasks from local storage and extracting the value only to return it for display in text area
+//Getting task value from local storage to return it for display in text area
 const getFromLS = (key) => {
-  // const infoFromLS = JSON.parse(localStorage.getItem(key));
-  // console.log(infoFromLS);
-  // return infoFromLS;
-  return "running";
+  return JSON.parse(localStorage.getItem(key));
 };
 
+//Write to local storage when text is entered in textarea and saved by user
 const writeToLS = (key, data) => {
-  localStorage.setItem(key, data);
+  localStorage.setItem(key, JSON.stringify(data));
 };
 
 const renderDate = () => {
@@ -119,6 +117,7 @@ const renderTimeBlock = () => {
     });
   };
 
+  //renderClearButton();
   workingHours.forEach(renderBlock);
 };
 
