@@ -1,3 +1,4 @@
+//setting up the range of working hours to display in schedule
 const workingHours = [
   { timeLabel: "8am", key: 8 },
   { timeLabel: "9am", key: 9 },
@@ -12,39 +13,70 @@ const workingHours = [
   { timeLabel: "6pm", key: 18 },
 ];
 
-//Getting task value from local storage to return it for display in text area
+//Utility functions
+
+//Get from local storage
 const getFromLS = (key) => {
   return JSON.parse(localStorage.getItem(key));
 };
 
-//Write to local storage when text is entered in textarea and saved by user
+//Write to local storage
 const writeToLS = (key, data) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
+//Remove item from local storage
+const removeFromLS = (key) => {
+  localStorage.removeItem(key);
+  window.location.reload(true);
+};
+
+//Clear local storage
+const clearLS = () => {
+  localStorage.clear();
+};
+
+//funtion to render current date in header (moment.js)
 const renderDate = () => {
   const currentDate = moment().format("dddd, Do of MMMM YYYY");
   $("#currentDay").append(currentDate);
 };
 
-const handleSaveClick = (event) => {
+//function to handle click on time blocks remove buttons
+const handleRemoveClick = (event) => {
+  //stops propagation to other elements in the container
   event.stopPropagation();
+  //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
-  console.log(targetKey);
+  //removes the data-key and its value from local storage
+  removeFromLS(targetKey);
+};
 
+//function to handle click on time blocks save buttons
+const handleSaveClick = (event) => {
+  //stops propagation to other elements in the container
+  event.stopPropagation();
+  //gets the data-key for the button clicked
+  const targetKey = $(event.target).attr("data-key");
+  //gets the value of the corresponding textarea (textarea with same data-key)
   const taskValue = $(`#task-${targetKey}`).val();
-  console.log(taskValue);
-
+  //sets the data-key and its value in local storage (for data persistence)
   writeToLS(targetKey, taskValue);
 };
 
+//function to handle the click on the "clear scheduler" button
 const handleClearClick = () => {
-  console.log("LS clear start");
-  localStorage.clear();
-  console.log("LS clear end");
+  //stops propagation to other elements in the container
+  event.stopPropagation();
+  //calls function to clear local storage
+  clearLS();
+  //reloads the page to show that the timeblocks have been cleared
   window.location.reload(true);
 };
+
+//function to render the "clear scheduler" button on the page
 const renderClearButton = () => {
+  //creates and appends the button to the container
   $("#container").append(
     $("<div>")
       .addClass("clear-block d-flex flex-row justify-content-center")
@@ -56,26 +88,15 @@ const renderClearButton = () => {
           .attr("id", "clear-btn")
           .attr("data-key", "all")
           .html("Clear Scheduler")
+          //adds event listener on the button
           .click(handleClearClick)
       )
   );
 };
 
+//function to render the time blocks on the page
 const renderTimeBlock = () => {
-  //METHOD 1 - with variable to get the appropriate class, then assign the additional class when rendering  -> need to add ${getHourClass(each)} in textarea addClass line
-  // const getHourClass = (each) => {
-  //   const currentTime = moment().format("H");
-  //   let hourClass = "";
-  //   if (each.key < currentTime) {
-  //     hourClass = "past";
-  //   } else if (each.key === currentTime) {
-  //     hourClass = "present";
-  //   } else {
-  //     hourClass = "future";
-  //   }
-  //   return hourClass;
-  // };
-
+  //fetches the current time with moment.js
   const currentTime = parseInt(moment().format("H"));
   console.log(currentTime);
 
@@ -100,25 +121,21 @@ const renderTimeBlock = () => {
           $("<button>")
             .addClass("btn-area saveBtn p-2")
             .attr("type", "button")
-            .attr("id", `btn-${each.key}`)
+            .attr("id", `saveBtn-${each.key}`)
             .attr("data-key", `${each.key}`)
             .html("Save")
-            .click(handleSaveClick)
+            .click(handleSaveClick),
+          $("<button>")
+            .addClass("btn-area saveBtn p-2")
+            .attr("type", "button")
+            .attr("id", `removeBtn-${each.key}`)
+            .attr("data-key", `${each.key}`)
+            .html("Remove")
+            .click(handleRemoveClick)
         )
     );
 
-    //METHOD 2 - with each function targeting the textarea after its creation
-    // $(`#task-${each.key}`).each(function () {
-    //   if (each.key < currentTime) {
-    //     $(`#task-${each.key}`).addClass("past");
-    //   } else if (each.key === currentTime) {
-    //     $(`#task-${each.key}`).addClass("present");
-    //   } else {
-    //     $(`#task-${each.key}`).addClass("future");
-    //   }
-    // });
-
-    //METHOD 3 - with addClass function directly targeting the textarea after its creation
+    //Add time related class - with addClass function directly targeting the textarea after its creation
     $(`#task-${each.key}`).addClass(function () {
       if (each.key < currentTime) {
         return "past";
@@ -144,6 +161,7 @@ const renderTimeBlock = () => {
   workingHours.forEach(renderBlock);
 };
 
+//Main function triggered on load
 const renderPlanner = () => {
   renderDate();
   renderClearButton();
