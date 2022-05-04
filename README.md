@@ -165,6 +165,7 @@ $("#container").append(
       $("<button>")
         .addClass("clearBtn p-2")
         .attr("type", "button")
+        .attr("data-purpose", "clear")
         .html("Clear Scheduler")
         .click(handleClearClick)
     )
@@ -201,4 +202,8 @@ const taskValue = $(`textarea[data-key=${targetKey}]`).val();
 
 ## Further improvements possible
 
-As this page only offers storage of the tasks to local storage, the natural next step would be of course to rework it by adding external storage.
+There is the option to refactore the render functions to create the time blocks and the buttons with jQuery/template strings syntax. That would potentially reduce the amount of code in those blocks.
+
+It would also be good to add restrictions on local storage: if the string is above a certain number of characters, it alerts the user that the message is too long, and the user must edit it to be able to save it.
+
+Furthermore, as this page only offers storage of the tasks to local storage, the natural next step would be of course to rework it by adding external storage.

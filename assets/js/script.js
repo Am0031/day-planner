@@ -22,13 +22,14 @@ const getFromLS = (key) => {
 
 //Write to local storage
 const writeToLS = (key, data) => {
-  localStorage.setItem(key, JSON.stringify(data));
+  if (data != "") {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
 };
 
 //Remove item from local storage
 const removeFromLS = (key) => {
   localStorage.removeItem(key);
-  window.location.reload(true);
 };
 
 //Clear local storage
@@ -44,20 +45,18 @@ const renderDate = () => {
   $("#currentDay").append(currentDate);
 };
 
-//function to handle click on time blocks remove buttons
+//function to handle click on remove buttons
 const handleRemoveClick = (event) => {
-  //stops propagation to other elements in the container
-  event.stopPropagation();
   //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
   //removes the data-key and its value from local storage
   removeFromLS(targetKey);
+  //re-renders the scheduler
+  renderScheduler();
 };
 
-//function to handle click on time blocks save buttons
+//function to handle click on save buttons
 const handleSaveClick = (event) => {
-  //stops propagation to other elements in the container
-  event.stopPropagation();
   //gets the data-key for the button clicked
   const targetKey = $(event.target).attr("data-key");
   //gets the value of the corresponding textarea (textarea with same data-key)
@@ -66,14 +65,29 @@ const handleSaveClick = (event) => {
   writeToLS(targetKey, taskValue);
 };
 
-//function to handle the click on the "clear scheduler" button
+//function to handle click on the clear button
 const handleClearClick = () => {
-  //stops propagation to other elements in the container
-  event.stopPropagation();
   //calls function to clear local storage
   clearLS();
-  //reloads the page to show that the time blocks have been cleared
-  window.location.reload(true);
+  //re-renders the scheduler
+  renderScheduler();
+};
+
+//function to handle a click in the container - redirects to the right handling function
+const handleClick = (event) => {
+  //stops propagation to other elements in the container
+  event.stopPropagation();
+  //gets the date purpose to know if a save or remove button was clicked
+  const targetPurpose = $(event.target).attr("data-purpose");
+  //if remove button was clicked, then goes to the handleRemoveClick function
+  if (targetPurpose == "remove") {
+    handleRemoveClick(event);
+    //if save button was clicked then, goes to the handleSaveClick function
+  } else if (targetPurpose == "save") {
+    handleSaveClick(event);
+  } else if (targetPurpose == "clear") {
+    handleClearClick();
+  }
 };
 
 //function to render the "clear scheduler" button on the page
@@ -86,17 +100,16 @@ const renderClearButton = () => {
         $("<button>")
           .addClass("clearBtn p-2")
           .attr("type", "button")
+          .attr("data-purpose", "clear")
           .html("Clear Scheduler")
-          //adds event listener on the button
-          .click(handleClearClick)
       )
   );
 };
 
 //function to render the time blocks on the page
 const renderTimeBlock = () => {
-  //fetches the current time with moment.js and parse it to ensure it is number type
-  const currentTime = parseInt(moment().format("H"));
+  //fetches the current hour with moment.js
+  const currentTime = moment().hour();
 
   //creates and append the n time block
   const renderBlock = (each) => {
@@ -117,17 +130,15 @@ const renderTimeBlock = () => {
             .addClass("btn-area saveBtn p-2")
             .attr("type", "button")
             .attr("data-key", `${each.key}`)
+            .attr("data-purpose", "save")
             //add fontawesome info for icon display in button
-            .html('<i class="fa-solid fa-floppy-disk"></i>')
-            //add the relevant click event to the button - here the save button
-            .click(handleSaveClick),
+            .html('<i class="fa-solid fa-floppy-disk"></i>'),
           $("<button>")
             .addClass("btn-area removeBtn p-2")
             .attr("type", "button")
             .attr("data-key", `${each.key}`)
+            .attr("data-purpose", "remove")
             .html('<i class="fa-solid fa-trash"></i>')
-            //add the relevant click event to the button - here the remove button
-            .click(handleRemoveClick)
         )
     );
 
@@ -160,14 +171,23 @@ const renderTimeBlock = () => {
   workingHours.forEach(renderBlock);
 };
 
+//renders the different parts of the scheduler - can be re-used to re-render after removing items
+const renderScheduler = () => {
+  //empty the container
+  $("#container").empty();
+  //render the elements in the container
+  renderClearButton();
+  renderTimeBlock();
+  //assign the event listener to the container
+  $("#container").click(handleClick);
+};
+
 //Main function triggered on load
 const renderPlanner = () => {
   //1st step - render date in header
   renderDate();
-  //2nd step - render clear button in main div container
-  renderClearButton();
-  //3rd step - render time block in main div container
-  renderTimeBlock();
+  //2nd step - render scheduler in div container
+  renderScheduler();
 };
 
 //instruction on load of page
