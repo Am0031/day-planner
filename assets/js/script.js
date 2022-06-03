@@ -22,7 +22,7 @@ const getFromLS = (key) => {
 
 //Write to local storage
 const writeToLS = (key, data) => {
-  if (data != "") {
+  if (data !== "") {
     localStorage.setItem(key, JSON.stringify(data));
   }
 };
@@ -80,12 +80,12 @@ const handleClick = (event) => {
   //gets the date purpose to know if a save or remove button was clicked
   const targetPurpose = $(event.target).attr("data-purpose");
   //if remove button was clicked, then goes to the handleRemoveClick function
-  if (targetPurpose == "remove") {
+  if (targetPurpose === "remove") {
     handleRemoveClick(event);
     //if save button was clicked then, goes to the handleSaveClick function
-  } else if (targetPurpose == "save") {
+  } else if (targetPurpose === "save") {
     handleSaveClick(event);
-  } else if (targetPurpose == "clear") {
+  } else if (targetPurpose === "clear") {
     handleClearClick();
   }
 };
@@ -107,7 +107,7 @@ const renderClearButton = () => {
 };
 
 //function to render the time blocks on the page
-const renderTimeBlock = () => {
+const renderTimeBlocks = () => {
   //fetches the current hour with moment.js
   const currentTime = moment().hour();
 
@@ -177,7 +177,7 @@ const renderScheduler = () => {
   $("#container").empty();
   //render the elements in the container
   renderClearButton();
-  renderTimeBlock();
+  renderTimeBlocks();
   //assign the event listener to the container
   $("#container").click(handleClick);
 };
