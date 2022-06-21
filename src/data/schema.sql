@@ -6,7 +6,7 @@ USE day_planner_db;
 
 CREATE TABLE tasks (
   id INT NOT NULL AUTO_INCREMENT,
-  hour INT NOT NULL,
+  timeKey INT NOT NULL,
   taskText VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 );

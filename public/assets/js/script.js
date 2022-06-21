@@ -39,6 +39,49 @@ const clearLS = () => {
 
 //END UTILITY FUNCTIONS
 
+//API calls
+const getTasks = async () =>
+  await fetch("/api/tasks", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+const createTask = (task) =>
+  fetch("/api/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+
+const editNote = (task) =>
+  //id and data is passed with the currentNote created and passed in
+  fetch(`/api/tasks/${task.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+const deleteTask = (id) =>
+  fetch(`/api/tasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+const clearAllTasks = () =>
+  fetch(`/api/tasks`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+//END API calls
+
 //function to render current date in header (moment.js)
 const renderDate = () => {
   const currentDate = moment().format("dddd, Do of MMMM YYYY");
@@ -107,9 +150,11 @@ const renderClearButton = () => {
 };
 
 //function to render the time blocks on the page
-const renderTimeBlocks = () => {
+const renderTimeBlocks = async () => {
   //fetches the current hour with moment.js
   const currentTime = moment().hour();
+
+  const allTasks = await (await getTasks()).json();
 
   //creates and append the n time block
   const renderBlock = (each) => {
@@ -156,13 +201,13 @@ const renderTimeBlocks = () => {
 
     //Display task from local storage in corresponding n text area
     $(`textarea[data-key=${each.key}]`).add(() => {
-      //converts key into a string
-      const keyLS = each.key.toString();
-      //pass the string to the getFromLS function (as local storage stores strings)
-      const taskLS = getFromLS(keyLS);
-      //if the function returns a value from LS, then writes this value into the html attribute
-      if (taskLS) {
-        $(`textarea[data-key=${each.key}]`).html(taskLS);
+      //filter the task array from db to find if there's a task for that timeKey
+      const taskLS = allTasks.data.filter((x) => x.timeKey === each.key);
+
+      //if the function returns a value, then write this value's text into the html attribute
+      if (taskLS.length !== 0) {
+        const taskText = taskLS[0].taskText;
+        $(`textarea[data-key=${each.key}]`).html(taskText);
       }
     });
   };
