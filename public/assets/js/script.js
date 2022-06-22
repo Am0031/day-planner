@@ -66,12 +66,13 @@ const editTask = async (task) =>
     },
     body: JSON.stringify(task),
   });
-const deleteTask = async (id) =>
-  await fetch(`/api/tasks/${id}`, {
+const deleteTask = async (task) =>
+  await fetch(`/api/tasks/${task.id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(task),
   });
 const clearAllTasks = async () =>
   await fetch(`/api/tasks`, {
@@ -89,11 +90,12 @@ const renderDate = () => {
 };
 
 //function to handle click on remove buttons
-const handleRemoveClick = (event) => {
+const handleRemoveClick = async (event) => {
   //gets the data-key for the button clicked
-  const targetKey = $(event.target).attr("data-key");
+  const targetKey = parseInt($(event.target).attr("data-key"));
   //removes the data-key and its value from local storage
-  removeFromLS(targetKey);
+  const taskToDelete = { timeKey: targetKey };
+  await deleteTask(taskToDelete);
   //re-renders the scheduler
   renderScheduler();
 };
@@ -229,7 +231,7 @@ const renderTimeBlocks = async () => {
 };
 
 //renders the different parts of the scheduler - can be re-used to re-render after removing items
-const renderScheduler = () => {
+const renderScheduler = async () => {
   //empty the container
   $("#container").empty();
   //render the elements in the container
