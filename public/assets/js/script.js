@@ -48,8 +48,8 @@ const getTasks = async () =>
     },
   });
 
-const createTask = (task) =>
-  fetch("/api/tasks", {
+const createTask = async (task) =>
+  await fetch("/api/tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,24 +57,24 @@ const createTask = (task) =>
     body: JSON.stringify(task),
   });
 
-const editNote = (task) =>
+const editTask = async (task) =>
   //id and data is passed with the currentNote created and passed in
-  fetch(`/api/tasks/${task.id}`, {
+  await fetch(`/api/tasks/${task.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(task),
   });
-const deleteTask = (id) =>
-  fetch(`/api/tasks/${id}`, {
+const deleteTask = async (id) =>
+  await fetch(`/api/tasks/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
   });
-const clearAllTasks = () =>
-  fetch(`/api/tasks`, {
+const clearAllTasks = async () =>
+  await fetch(`/api/tasks`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -99,13 +99,24 @@ const handleRemoveClick = (event) => {
 };
 
 //function to handle click on save buttons
-const handleSaveClick = (event) => {
+const handleSaveClick = async (event) => {
   //gets the data-key for the button clicked
-  const targetKey = $(event.target).attr("data-key");
+  const targetKey = parseInt($(event.target).attr("data-key"));
+
   //gets the value of the corresponding textarea (textarea with same data-key)
   const taskValue = $(`textarea[data-key=${targetKey}]`).val();
+
+  //check if task already exists in database
+  const allTasks = await (await getTasks()).json();
+  const taskExists = allTasks.data.filter((t) => t.timeKey === targetKey);
+
   //sets the data-key and its value in local storage (for data persistence)
-  writeToLS(targetKey, taskValue);
+  const newTask = {
+    timeKey: targetKey,
+    taskText: taskValue,
+  };
+
+  taskExists.length !== 0 ? await editTask(newTask) : await createTask(newTask);
 };
 
 //function to handle click on the clear button
@@ -122,6 +133,7 @@ const handleClick = (event) => {
   event.stopPropagation();
   //gets the date purpose to know if a save or remove button was clicked
   const targetPurpose = $(event.target).attr("data-purpose");
+
   //if remove button was clicked, then goes to the handleRemoveClick function
   if (targetPurpose === "remove") {
     handleRemoveClick(event);
@@ -202,7 +214,7 @@ const renderTimeBlocks = async () => {
     //Display task from local storage in corresponding n text area
     $(`textarea[data-key=${each.key}]`).add(() => {
       //filter the task array from db to find if there's a task for that timeKey
-      const taskLS = allTasks.data.filter((x) => x.timeKey === each.key);
+      const taskLS = allTasks.data.filter((t) => t.timeKey === each.key);
 
       //if the function returns a value, then write this value's text into the html attribute
       if (taskLS.length !== 0) {
