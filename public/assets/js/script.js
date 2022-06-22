@@ -93,7 +93,7 @@ const renderDate = () => {
 const handleRemoveClick = async (event) => {
   //gets the data-key for the button clicked
   const targetKey = parseInt($(event.target).attr("data-key"));
-  //removes the data-key and its value from local storage
+  //removes the data-key and its value from sql database
   const taskToDelete = { timeKey: targetKey };
   await deleteTask(taskToDelete);
   //re-renders the scheduler
@@ -122,9 +122,9 @@ const handleSaveClick = async (event) => {
 };
 
 //function to handle click on the clear button
-const handleClearClick = () => {
-  //calls function to clear local storage
-  clearLS();
+const handleClearClick = async () => {
+  //calls function to clear all tasks
+  await clearAllTasks();
   //re-renders the scheduler
   renderScheduler();
 };
@@ -242,7 +242,7 @@ const renderScheduler = async () => {
 };
 
 //Main function triggered on load
-const renderPlanner = () => {
+const renderPlanner = async () => {
   //1st step - render date in header
   renderDate();
   //2nd step - render scheduler in div container

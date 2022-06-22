@@ -18,7 +18,6 @@ const getTasks = async (req, res) => {
 const createTask = async (req, res) => {
   try {
     const payload = req.body;
-    console.log(payload);
 
     await req.db.query("INSERT INTO tasks (timeKey, taskText) VALUES (?,?)", [
       payload.timeKey,
@@ -39,7 +38,6 @@ const createTask = async (req, res) => {
 };
 const deleteTask = async (req, res) => {
   try {
-    console.log(req.body);
     const { timeKey } = req.body;
 
     await req.db.query("DELETE FROM tasks WHERE timeKey=?", [timeKey]);
@@ -60,7 +58,6 @@ const deleteTask = async (req, res) => {
 const editTask = async (req, res) => {
   try {
     const payload = req.body;
-    console.log(payload);
 
     await req.db.query(
       `UPDATE tasks SET taskText = "${payload.taskText}" WHERE timeKey = "${payload.timeKey}"`
@@ -79,6 +76,21 @@ const editTask = async (req, res) => {
   }
 };
 
-const clearAllTasks = (req, res) => {};
+const clearAllTasks = async (req, res) => {
+  try {
+    await req.db.query("DELETE FROM tasks");
+
+    return res.json({
+      success: true,
+    });
+  } catch (error) {
+    console.log(`[ERROR: Failed to delete all tasks | ${error.message}]`);
+
+    return res.status(500).json({
+      success: false,
+      error: "Failed to delete all tasks",
+    });
+  }
+};
 
 module.exports = { getTasks, createTask, deleteTask, editTask, clearAllTasks };
