@@ -38,9 +38,9 @@ const createTask = async (req, res) => {
 };
 const deleteTask = async (req, res) => {
   try {
-    const { timeKey } = req.body;
+    const { id } = req.params;
 
-    await req.db.query("DELETE FROM tasks WHERE timeKey=?", [timeKey]);
+    await req.db.query("DELETE FROM tasks WHERE timeKey=?", [id]);
 
     return res.json({
       success: true,

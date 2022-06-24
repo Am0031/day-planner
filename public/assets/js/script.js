@@ -66,13 +66,12 @@ const editTask = async (task) =>
     },
     body: JSON.stringify(task),
   });
-const deleteTask = async (task) =>
-  await fetch(`/api/tasks/${task.id}`, {
+const deleteTask = async (id) =>
+  await fetch(`/api/tasks/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(task),
   });
 const clearAllTasks = async () =>
   await fetch(`/api/tasks`, {
@@ -94,8 +93,7 @@ const handleRemoveClick = async (event) => {
   //gets the data-key for the button clicked
   const targetKey = parseInt($(event.target).attr("data-key"));
   //removes the data-key and its value from sql database
-  const taskToDelete = { timeKey: targetKey };
-  await deleteTask(taskToDelete);
+  await deleteTask(targetKey);
   //re-renders the scheduler
   renderScheduler();
 };
@@ -234,6 +232,7 @@ const renderTimeBlocks = async () => {
 const renderScheduler = async () => {
   //empty the container
   $("#container").empty();
+  $("#container").unbind("click");
   //render the elements in the container
   renderClearButton();
   renderTimeBlocks();
