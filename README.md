@@ -4,9 +4,9 @@
 
 This project is to develop a simple page where the user can add some tasks at specific hours of the day, save them, edit them or even remove them.
 
-Deployed URL: [https://am0031.github.io/day-planner/](https://am0031.github.io/day-planner/)
+Deployed URL: [Heroku page](https://afternoon-crag-21477.herokuapp.com/)
 
-Github repository: [https://github.com/Am0031/day-planner](https://github.com/Am0031/day-planner)
+Github repository: [day-planner repo](https://github.com/Am0031/day-planner)
 
 ## Table of content
 
