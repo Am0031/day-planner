@@ -15,30 +15,6 @@ const workingHours = [
 
 //UTILITY FUNCTIONS
 
-//Get from local storage
-const getFromLS = (key) => {
-  return JSON.parse(localStorage.getItem(key));
-};
-
-//Write to local storage
-const writeToLS = (key, data) => {
-  if (data !== "") {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-};
-
-//Remove item from local storage
-const removeFromLS = (key) => {
-  localStorage.removeItem(key);
-};
-
-//Clear local storage
-const clearLS = () => {
-  localStorage.clear();
-};
-
-//END UTILITY FUNCTIONS
-
 //API calls
 const getTasks = async () =>
   await fetch("/api/tasks", {
@@ -81,6 +57,8 @@ const clearAllTasks = async () =>
     },
   });
 //END API calls
+
+//END UTILITY FUNCTIONS
 
 //function to render current date in header (moment.js)
 const renderDate = () => {
@@ -188,7 +166,6 @@ const renderTimeBlocks = async () => {
             .attr("type", "button")
             .attr("data-key", `${each.key}`)
             .attr("data-purpose", "save")
-            //add fontawesome info for icon display in button
             .html('<i class="fa-solid fa-floppy-disk"></i>'),
           $("<button>")
             .addClass("btn-area removeBtn p-2")
