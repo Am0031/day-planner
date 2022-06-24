@@ -15,27 +15,48 @@ const workingHours = [
 
 //UTILITY FUNCTIONS
 
-//Get from local storage
-const getFromLS = (key) => {
-  return JSON.parse(localStorage.getItem(key));
-};
+//API calls
+const getTasks = async () =>
+  await fetch("/api/tasks", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-//Write to local storage
-const writeToLS = (key, data) => {
-  if (data !== "") {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-};
+const createTask = async (task) =>
+  await fetch("/api/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
 
-//Remove item from local storage
-const removeFromLS = (key) => {
-  localStorage.removeItem(key);
-};
-
-//Clear local storage
-const clearLS = () => {
-  localStorage.clear();
-};
+const editTask = async (task) =>
+  //id and data is passed with the currentNote created and passed in
+  await fetch(`/api/tasks/${task.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+const deleteTask = async (id) =>
+  await fetch(`/api/tasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+const clearAllTasks = async () =>
+  await fetch(`/api/tasks`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+//END API calls
 
 //END UTILITY FUNCTIONS
 
@@ -46,29 +67,40 @@ const renderDate = () => {
 };
 
 //function to handle click on remove buttons
-const handleRemoveClick = (event) => {
+const handleRemoveClick = async (event) => {
   //gets the data-key for the button clicked
-  const targetKey = $(event.target).attr("data-key");
-  //removes the data-key and its value from local storage
-  removeFromLS(targetKey);
+  const targetKey = parseInt($(event.target).attr("data-key"));
+  //removes the data-key and its value from sql database
+  await deleteTask(targetKey);
   //re-renders the scheduler
   renderScheduler();
 };
 
 //function to handle click on save buttons
-const handleSaveClick = (event) => {
+const handleSaveClick = async (event) => {
   //gets the data-key for the button clicked
-  const targetKey = $(event.target).attr("data-key");
+  const targetKey = parseInt($(event.target).attr("data-key"));
+
   //gets the value of the corresponding textarea (textarea with same data-key)
   const taskValue = $(`textarea[data-key=${targetKey}]`).val();
+
+  //check if task already exists in database
+  const allTasks = await (await getTasks()).json();
+  const taskExists = allTasks.data.filter((t) => t.timeKey === targetKey);
+
   //sets the data-key and its value in local storage (for data persistence)
-  writeToLS(targetKey, taskValue);
+  const newTask = {
+    timeKey: targetKey,
+    taskText: taskValue,
+  };
+
+  taskExists.length !== 0 ? await editTask(newTask) : await createTask(newTask);
 };
 
 //function to handle click on the clear button
-const handleClearClick = () => {
-  //calls function to clear local storage
-  clearLS();
+const handleClearClick = async () => {
+  //calls function to clear all tasks
+  await clearAllTasks();
   //re-renders the scheduler
   renderScheduler();
 };
@@ -79,6 +111,7 @@ const handleClick = (event) => {
   event.stopPropagation();
   //gets the date purpose to know if a save or remove button was clicked
   const targetPurpose = $(event.target).attr("data-purpose");
+
   //if remove button was clicked, then goes to the handleRemoveClick function
   if (targetPurpose === "remove") {
     handleRemoveClick(event);
@@ -107,9 +140,11 @@ const renderClearButton = () => {
 };
 
 //function to render the time blocks on the page
-const renderTimeBlocks = () => {
+const renderTimeBlocks = async () => {
   //fetches the current hour with moment.js
   const currentTime = moment().hour();
+
+  const allTasks = await (await getTasks()).json();
 
   //creates and append the n time block
   const renderBlock = (each) => {
@@ -131,7 +166,6 @@ const renderTimeBlocks = () => {
             .attr("type", "button")
             .attr("data-key", `${each.key}`)
             .attr("data-purpose", "save")
-            //add fontawesome info for icon display in button
             .html('<i class="fa-solid fa-floppy-disk"></i>'),
           $("<button>")
             .addClass("btn-area removeBtn p-2")
@@ -156,13 +190,13 @@ const renderTimeBlocks = () => {
 
     //Display task from local storage in corresponding n text area
     $(`textarea[data-key=${each.key}]`).add(() => {
-      //converts key into a string
-      const keyLS = each.key.toString();
-      //pass the string to the getFromLS function (as local storage stores strings)
-      const taskLS = getFromLS(keyLS);
-      //if the function returns a value from LS, then writes this value into the html attribute
-      if (taskLS) {
-        $(`textarea[data-key=${each.key}]`).html(taskLS);
+      //filter the task array from db to find if there's a task for that timeKey
+      const taskLS = allTasks.data.filter((t) => t.timeKey === each.key);
+
+      //if the function returns a value, then write this value's text into the html attribute
+      if (taskLS.length !== 0) {
+        const taskText = taskLS[0].taskText;
+        $(`textarea[data-key=${each.key}]`).html(taskText);
       }
     });
   };
@@ -172,9 +206,10 @@ const renderTimeBlocks = () => {
 };
 
 //renders the different parts of the scheduler - can be re-used to re-render after removing items
-const renderScheduler = () => {
+const renderScheduler = async () => {
   //empty the container
   $("#container").empty();
+  $("#container").unbind("click");
   //render the elements in the container
   renderClearButton();
   renderTimeBlocks();
@@ -183,7 +218,7 @@ const renderScheduler = () => {
 };
 
 //Main function triggered on load
-const renderPlanner = () => {
+const renderPlanner = async () => {
   //1st step - render date in header
   renderDate();
   //2nd step - render scheduler in div container
