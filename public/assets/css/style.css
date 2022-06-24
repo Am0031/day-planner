@@ -29,6 +29,9 @@ textarea {
 }
 
 /* Styling for main div container - time blocks */
+.container {
+  min-height: 925px;
+}
 
 .description {
   white-space: pre-wrap;
