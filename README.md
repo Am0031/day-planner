@@ -1,12 +1,25 @@
 # Day-planner
 
-This project is to develop a simple page where the user can add some tasks at specific hours of the day, save them (persistent data), edit them or even remove them.
+## Summary
+
+This project is to develop a simple page where the user can add some tasks at specific hours of the day, save them, edit them or even remove them.
 
 Deployed URL: [https://am0031.github.io/day-planner/](https://am0031.github.io/day-planner/)
 
 Github repository: [https://github.com/Am0031/day-planner](https://github.com/Am0031/day-planner)
 
-## General description of the page
+## Table of content
+
+- [General description](#general-description)
+- [Screenshots](#screenshots)
+- [Technologies](#technologies)
+- [Development steps](#development-steps)
+- [Wireframe](#wireframe)
+- [Functionalities](#functionalities)
+- [Links to libraries](#links-to-libraries)
+- [Further improvements possible](#further-improvements-possible)
+
+## General description
 
 When accessing the page, the user can see a large header with title and the current date. Underneath is a set of time blocks which represent a working day. Each time block consists of a time label on the left, a text field in the middle where the user can enter a task, two buttons on the right to save the task in the text field or remove it from the text field.
 
@@ -16,13 +29,13 @@ The text fields in the timeblocks are colour coded based on the current time:
 - red: for the current hour
 - green: for the remaining hours in the working day
 
-The user also has the option to use the local storage to keep track of their tasks. When interaction with the page, the user can:
+The user also has access to a database to keep track of their tasks. When interacting with the page, the user can:
 
-- save their task in each time block in local storage with the blue save button in each time block
-- clear one specific task from local storage with the orange remove button in each time block
+- save their task with the blue save button in each time block
+- clear one specific task with the orange remove button in each time block
 - clear the complete scheduler with the orange button "clear scheduler" above the time blocks
 
-## Screenshot of the page
+## Screenshots
 
 <details>
 <summary>Day planner screenshot - desktop version</summary>
@@ -42,15 +55,27 @@ The user also has the option to use the local storage to keep track of their tas
 
 For this project, the following technologies and libraries were used:
 
-- HTML, CSS and JS files for file structure
+For public file structure:
+
+- HTML, CSS and JS files
 - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/) for page styling
 - [Fontawesome](https://fontawesome.com/search?s=solid%2Cbrands) for use of icons
 - [Moment.js](https://momentjs.com/docs/#/displaying/format/) for use of date and time stamp
 - [jQuery](https://jquery.com/) for use in writing JS functionalities
 
-## Steps taken to develop the page
+For the source file structure and database:
+
+- [Node.js](https://nodejs.org/en/) with npm and the packages:
+  - [Express](https://www.npmjs.com/package/express) for server setup
+  - [mysql2](https://www.npmjs.com/package/mysql2) for database
+  - [dotenv](https://www.npmjs.com/package/dotenv) for sensitive data control
+  - [nodemon](https://www.npmjs.com/package/nodemon) for the development phase
+
+## Development steps
 
 The following steps were followed as listed to develop this project, and are further details in the sections below:
+
+First pass:
 
 - have a clear understanding of the functionalities the page will offer
 - set the wireframe of the project for a clear view of the required html structure
@@ -59,22 +84,53 @@ The following steps were followed as listed to develop this project, and are fur
 - add functionality using jQuery library and interact with local storage (for persistent data)
 - refactore for clean code
 
-## General functionalities of the page
+Second pass - addition of server and database:
+
+- initialise the app for use with node/npm packages
+- reorganise folders and files to build routes
+- prepare mysql database with schema and seed files
+- deploy on Heroku
+
+## Wireframe
+
+![Day planner - wireframe](./public/assets/screenshots/screenshot-wireframe.png)
+
+## Functionalities
 
 The user journey is explained above in the section **General description**.
 When looking at it in terms of functions, this can be translated into the following logic:
 
-![Day planner - general logic](./assets/screenshots/screenshot-logic.png)
+![Day planner - general logic](./public/assets/screenshots/screenshot-logic.png)
 
-## Wireframe for the project
+The routes needed for interaction with the database are detailed below:
 
-![Day planner - wireframe](./assets/screenshots/screenshot-wireframe.png)
+![Day planner - Routes for api calls](./public/assets/screenshots/screenshot-routes.png)
 
-Note: the divs shown in red represent a time block. Each time block contains: a p tag on the left displaying the hour for this time block, a text field for user input, two buttons for saving the user input or deleting it. The number of time blocks to display matches the number of working hours defines in our workingHours array.
+As a result, the structure of the server was built as per this illustration:
+
+![Day planner - Server structure](./public/assets/screenshots/screenshot-server.png)
 
 ## Links to libraries
 
 For this project we used the following versions of the libraries mentioned above:
+
+```
+Node.js: 18.2.0
+NPM: 8.9.0
+```
+
+NPM packages:
+
+```
+
+"dotenv": "^16.0.1",
+"express": "^4.18.1",
+"mysql2": "^2.3.3",
+"nodemon": "^2.0.16"
+
+```
+
+Styling libraries:
 
 <details>
 <summary>Head link - Bootstrap</summary>
@@ -140,7 +196,7 @@ For this project we used the following versions of the libraries mentioned above
 
 </details>
 
-## Styling with CSS and Bootstrap
+### Styling
 
 Styling of the page is a combination of a local CSS file and the use of some bootstrap classes:
 
@@ -148,62 +204,12 @@ Styling of the page is a combination of a local CSS file and the use of some boo
 - via bootstrap classes: flex properties of containers and alignment of items
   The example below shows how each element of the time block has a mixture of author classes <span style="color:blue">(in blue)</span> and bootstrap classes <span style="color:yellow">(in yellow)</span> depending on the style required:
 
-![Allocation of classes - author and bootstrap](./assets/screenshots/screenshot-classes.png)
-
-## Using jQuery
-
-For this page, the creating of elements and interaction with them was done using jQuery. See below a few snippets of the JS code as examples:
-
-<details>
-<summary>jQuery syntax for creating page elements and appending them to a container</summary>
-
-```javascript
-$("#container").append(
-  $("<div>")
-    .addClass("clear-block d-flex flex-row justify-content-center")
-    .append(
-      $("<button>")
-        .addClass("clearBtn p-2")
-        .attr("type", "button")
-        .attr("data-purpose", "clear")
-        .html("Clear Scheduler")
-        .click(handleClearClick)
-    )
-);
-```
-
-</details>
-
-<details>
-<summary>jQuery syntax for targeting a specific element and adding a class to an element</summary>
-
-```javascript
-$(`textarea[data-key=${each.key}]`).addClass(() => {...});
-```
-
-</details>
-
-<details>
-<summary>jQuery syntax for getting an element's attribute's value</summary>
-
-```javascript
-const targetKey = $(event.target).attr("data-key");
-```
-
-</details>
-<details>
-<summary>jQuery syntax for targeting a specific element and getting its value</summary>
-
-```javascript
-const taskValue = $(`textarea[data-key=${targetKey}]`).val();
-```
-
-</details>
+![Allocation of classes - author and bootstrap](./public/assets/screenshots/screenshot-classes.png)
 
 ## Further improvements possible
 
-There is the option to refactore the render functions to create the time blocks and the buttons with jQuery/template strings syntax. That would potentially reduce the amount of code in those blocks.
+There is the option to refactor the render functions to create the time blocks and the buttons with jQuery/template strings syntax. That would potentially reduce the amount of code in those blocks.
 
-It would also be good to add restrictions on local storage: if the string is above a certain number of characters, it alerts the user that the message is too long, and the user must edit it to be able to save it.
+It would also be possible to modularise the code so that the rendering functions and other utility functions live in their own module.
 
-Furthermore, as this page only offers storage of the tasks to local storage, the natural next step would be of course to rework it by adding external storage.
+It would also be good to add restrictions on task length: if the string is above a certain number of characters, it alerts the user that the message is too long, and the user must edit it to be able to save it.
